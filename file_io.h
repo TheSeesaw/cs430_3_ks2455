@@ -13,8 +13,18 @@ typedef struct Pixel {
 typedef struct Shape {
 	enum ObjType type;
 	double width, height, radius;
-	//Vector3d *position, *color, *normal;
-	double pos_x, pos_y, pos_z, color_r, color_g, color_b, norm_x, norm_y, norm_z;
+	double pos_x, // position
+				 pos_y,
+				 pos_z,
+				 d_col_r, //diffuse color
+				 d_col_g,
+				 d_col_b,
+				 s_col_r, // specular color
+				 s_col_g,
+				 s_col_b,
+				 norm_x, // normal, for planes
+				 norm_y,
+				 norm_z;
 } Shape;
 
 void traverse_whitespace_and_comments(FILE *file_to_read);
