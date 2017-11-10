@@ -27,6 +27,20 @@ typedef struct Shape {
 				 norm_z;
 } Shape;
 
+typedef struct Light {
+	double col_r,
+				 col_g,
+				 col_b,
+				 theta,
+				 radial_a2,
+				 radial_a1,
+				 radial_a0,
+				 pos_x
+				 pos_y
+				 pos_z;
+} Light;
+
+
 void traverse_whitespace_and_comments(FILE *file_to_read);
 
 void read_camera_data(FILE *file_to_read, Shape *camera);

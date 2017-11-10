@@ -84,9 +84,9 @@ int main(int argc, char *argv[]) {
 		}
 		else // set the pixel's color to the color of the closest shape
 		{ // convert color from decimal scale to 24 bit rgb
-			pixel_plane[view_plane_index].r = (int)(shapes_list[closest_intersection_index].color_r * 255);
-			pixel_plane[view_plane_index].g = (int)(shapes_list[closest_intersection_index].color_g * 255);
-			pixel_plane[view_plane_index].b = (int)(shapes_list[closest_intersection_index].color_b * 255);
+			pixel_plane[view_plane_index].r = (int)(shapes_list[closest_intersection_index].d_col_r * 255);
+			pixel_plane[view_plane_index].g = (int)(shapes_list[closest_intersection_index].d_col_g * 255);
+			pixel_plane[view_plane_index].b = (int)(shapes_list[closest_intersection_index].d_col_b * 255);
 		}
 	}
   // Write results
