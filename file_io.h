@@ -51,6 +51,6 @@ void read_plane_data(FILE* file_to_read, Shape* output_list, int obj_index);
 
 void read_light_data(FILE* file_to_read, Light* light_list, int light_index);
 
-int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_list, Light *light_list, int *shape_count, int *light_count);
+int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_list, Light *light_list, int *obj_count_array);
 
 int write_pixels_to_p6(Pixel *buffer, char *out_file_name, int res_width, int res_height);

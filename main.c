@@ -7,7 +7,7 @@
 
 // GLOBAL VARIABLES //
 int res_width, res_height;
-int *total_shapes, total_lights;
+int total_objects[2] = {0};
 Shape *camera = NULL;
 Shape *shapes_list = NULL;
 Light *lights_list = NULL;
@@ -35,8 +35,10 @@ int main(int argc, char *argv[]) {
 	shapes_list = malloc(128*sizeof(Shape)); // initialize shapes list
 	lights_list = malloc(128*sizeof(Light)); // initialize lights list
 	camera = malloc(sizeof(Shape)); // initialize camera object
+	total_objects[0] = 0; // initialize shape count
+	total_objects[1] = 0; // initialize light count
   // Read file
-	read_object_file_director(argv[3], camera, shapes_list, lights_list, total_shapes, total_lights);
+	read_object_file_director(argv[3], camera, shapes_list, lights_list, total_objects);
 	// read width and height
   res_width = atoi(argv[1]);
   res_height = atoi(argv[2]);
@@ -67,7 +69,7 @@ int main(int argc, char *argv[]) {
 		normalized_ray->y = view_plane[view_plane_index].y / ray_length;
 		normalized_ray->z = view_plane[view_plane_index].z / ray_length;
 		// raytrace for target point in view plane for all shapes
-		for (int s_index = 0; s_index < total_shapes; s_index += 1)
+		for (int s_index = 0; s_index < total_objects[0]; s_index += 1)
 		{
 			intersection_test_result = intersection_test_director(&shapes_list[s_index], normalized_ray);
 			if (intersection_test_result < closest_intersection)
