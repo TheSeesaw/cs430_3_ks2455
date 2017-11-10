@@ -6,9 +6,11 @@
 #include "raycast.h"
 
 // GLOBAL VARIABLES //
-int res_width, res_height, total_shapes;
+int res_width, res_height;
+int *total_shapes, total_lights;
 Shape *camera = NULL;
 Shape *shapes_list = NULL;
+Light *lights_list = NULL;
 Point *view_plane = NULL;
 Pixel *pixel_plane = NULL;
 
@@ -31,9 +33,10 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	shapes_list = malloc(128*sizeof(Shape)); // initialize shapes list
+	lights_list = malloc(128*sizeof(Light)); // initialize lights list
 	camera = malloc(sizeof(Shape)); // initialize camera object
   // Read file
-	total_shapes = read_object_file_director(argv[3], camera, shapes_list);
+	read_object_file_director(argv[3], camera, shapes_list, lights_list, total_shapes, total_lights);
 	// read width and height
   res_width = atoi(argv[1]);
   res_height = atoi(argv[2]);
@@ -84,6 +87,7 @@ int main(int argc, char *argv[]) {
 		}
 		else // set the pixel's color to the color of the closest shape
 		{ // convert color from decimal scale to 24 bit rgb
+			// TODO: apply specular light
 			pixel_plane[view_plane_index].r = (int)(shapes_list[closest_intersection_index].d_col_r * 255);
 			pixel_plane[view_plane_index].g = (int)(shapes_list[closest_intersection_index].d_col_g * 255);
 			pixel_plane[view_plane_index].b = (int)(shapes_list[closest_intersection_index].d_col_b * 255);
@@ -97,6 +101,7 @@ int main(int argc, char *argv[]) {
 	free(pixel_plane);
 	free(view_plane);
 	free(camera);
+	free(lights_list);
 	free(shapes_list);
 	return 0;
 }

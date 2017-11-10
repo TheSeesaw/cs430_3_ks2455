@@ -35,8 +35,8 @@ typedef struct Light {
 				 radial_a2,
 				 radial_a1,
 				 radial_a0,
-				 pos_x
-				 pos_y
+				 pos_x,
+				 pos_y,
 				 pos_z;
 } Light;
 
@@ -49,6 +49,8 @@ void read_sphere_data(FILE *file_to_read, Shape *output_list, int obj_index);
 
 void read_plane_data(FILE* file_to_read, Shape* output_list, int obj_index);
 
-int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_list);
+void read_light_data(FILE* file_to_read, Light* light_list, int light_index);
+
+int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_list, Light *light_list, int *shape_count, int *light_count);
 
 int write_pixels_to_p6(Pixel *buffer, char *out_file_name, int res_width, int res_height);

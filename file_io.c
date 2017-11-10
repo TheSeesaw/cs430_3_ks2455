@@ -56,7 +56,7 @@ void read_camera_data(FILE* file_to_read, Shape *camera) {
 void read_sphere_data(FILE* file_to_read, Shape* output_list, int obj_index) {
 	// data should be in this format:
 	// sphere, radius: 2.0, diffuse_color: [1, 0, 0], specular_color: [1,1,1], position: [0, 1, -5]
-	char *wastebasket = malloc(10*sizeof(char)); // initialize a junk data variable
+	char *wastebasket = malloc(20*sizeof(char)); // initialize a junk data variable
 	output_list[obj_index].type = Sphere;
 	fscanf(file_to_read, "%s", wastebasket); // read past radius identifier
 	fscanf(file_to_read, "%lf", &output_list[obj_index].radius); // read in radius value
@@ -97,7 +97,7 @@ void read_plane_data(FILE* file_to_read, Shape* output_list, int obj_index)
 {
 	// data should be in this format
 	// plane, normal: [0, 1, 0], diffuse_color: [0, 1, 0], position: [0, 2, 5]
-	char *wastebasket = malloc(10*sizeof(char)); // initialize a junk data variable
+	char *wastebasket = malloc(20*sizeof(char)); // initialize a junk data variable
 	output_list[obj_index].type = Plane;
 	fscanf(file_to_read, "%s", wastebasket); // read past normal identifier
 	traverse_whitespace_and_comments(file_to_read); // skip over spaces
@@ -129,14 +129,54 @@ void read_plane_data(FILE* file_to_read, Shape* output_list, int obj_index)
 	fscanf(file_to_read, "%lf", &output_list[obj_index].pos_z); // read in z position
 	free(wastebasket); // free the junk data pointer
 }
-/* reads the camera object information, then calls read functions for each Shape
+
+void read_light_data(FILE* file_to_read, Light* light_list, int light_index)
+{
+	// data should be in the following format
+	// light, color: [2, 2, 2], theta: 0, radial-a2: 0.125, radial-a1: 0.125, radial-a0: 0.125, position: [1, 3, -1]
+	char *wastebasket = malloc(20*sizeof(char)); // initialize a junk data variable
+	fscanf(file_to_read, "%s", wastebasket); // read past color identifier
+	traverse_whitespace_and_comments(file_to_read); // skip over spaces
+	fgetc(file_to_read); // skip over left bracket
+	fscanf(file_to_read, "%lf", &light_list[light_index].col_r); // read in red value
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%lf", &light_list[light_index].col_g); // read in green value
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%lf", &light_list[light_index].col_b); // read in blue value
+	fgetc(file_to_read); // skip over right bracket
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%s", wastebasket); // read past theta identifier
+	fscanf(file_to_read, "%lf", &light_list[light_index].theta); // read in theta value
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%s", wastebasket); // read past radial-a2 identifier
+	fscanf(file_to_read, "%lf", &light_list[light_index].radial_a2); // read in radial-a2 value
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%s", wastebasket); // read past radial-a1 identifier
+	fscanf(file_to_read, "%lf", &light_list[light_index].radial_a1); // read in radial-a1 value
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%s", wastebasket); // read past radial-a0 identifier
+	fscanf(file_to_read, "%lf", &light_list[light_index].radial_a0); // read in radial-a0 value
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%s", wastebasket); // read past position identifier
+	traverse_whitespace_and_comments(file_to_read); // skip over spaces
+	fgetc(file_to_read); // skip over left bracket
+	fscanf(file_to_read, "%lf", &output_list[obj_index].pos_x); // read in x position
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%lf", &output_list[obj_index].pos_y); // read in y position
+	fgetc(file_to_read); // skip over comma
+	fscanf(file_to_read, "%lf", &output_list[obj_index].pos_z); // read in z position
+	free(wastebasket);
+}
+
+/* reads the camera object information, then calls read functions for each Object
    in the input file
 */
-int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_list)
+int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_list, Light *light_list, int *shape_count, int *light_count)
 {
   // declare variables
   char type_string[15];
   int object_index = 0;
+	int light_index = 0;
   // open the file to read binary data
   FILE* file_handle_in = fopen(in_file_name, "rb");
   // read in the camera
@@ -155,6 +195,10 @@ int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_l
     {
       read_plane_data(file_handle_in, output_list, object_index);
     }
+		else if (strcmp(type_string, "light") == 0)
+		{
+			read_light_data(file_handle_in, light_list, light_index);
+		}
     else
     {
       fprintf(stderr, "Error: invalid shape type.\n");
@@ -163,7 +207,7 @@ int read_object_file_director(char *in_file_name, Shape *camera, Shape *output_l
 		object_index++;
   }
   fclose(file_handle_in);
-  return object_index;
+  return 0;
 }
 
 // writes pixel data to a P6 .ppm file in binary
